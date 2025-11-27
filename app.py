@@ -53,30 +53,58 @@ def delete_definicion(termino):
     save_data(data)
 
 # ========================
-# Importar vistas
+# Importar vistas de las unidades
 # ========================
-from parcial_uno import parcial_uno
-from parcial_dos import parcial_dos
-from parcial_tres import parcial_tres
+try:
+    from unidad_uno import unidad_uno
+except ImportError:
+    unidad_uno = None
+
+try:
+    from unidad_dos import unidad_dos
+except ImportError:
+    unidad_dos = None
+
+try:
+    from unidad_tres import unidad_tres
+except ImportError:
+    unidad_tres = None
+
+try:
+    from unidad_cuatro import unidad_cuatro
+except ImportError:
+    unidad_cuatro = None
+
+try:
+    from unidad_cinco import unidad_cinco
+except ImportError:
+    unidad_cinco = None
 
 # ========================
 # Configuración
 # ========================
-st.set_page_config(page_title="Diccionario Cálculo III", layout="centered")
+st.set_page_config(page_title="Diccionario Cálculo I", layout="centered")
 
 # ========================
 # Menú lateral
 # ========================
 menu = st.sidebar.radio(
     "Selecciona una vista:",
-    ["Diccionario", "Cálculo III Parcial I", "Cálculo III Parcial II", "Cálculo III Parcial III"]
+    [
+        "Diccionario", 
+        "Unidad I", 
+        "Unidad II", 
+        "Unidad III",
+        "Unidad IV",
+        "Unidad V"
+    ]
 )
 
 # ===========================================================
 # VISTA DICCIONARIO
 # ===========================================================
 if menu == "Diccionario":
-    st.title("📘 Diccionario interactivo de Cálculo III")
+    st.title("📘 Diccionario interactivo de Cálculo I")
 
     # BUSCADOR
     col1, col2 = st.columns([3, 1])
@@ -169,13 +197,34 @@ if menu == "Diccionario":
             st.dataframe(df, use_container_width=True)
 
 # ===========================================================
-# OTRAS VISTAS
+# VISTAS DE LAS UNIDADES
 # ===========================================================
-elif menu == "Cálculo III Parcial I":
-    parcial_uno.app()
+elif menu == "Unidad I":
+    if unidad_uno:
+        unidad_uno.app()
+    else:
+        st.warning("Módulo de la Unidad I no disponible")
 
-elif menu == "Cálculo III Parcial II":
-    parcial_dos.app()
+elif menu == "Unidad II":
+    if unidad_dos:
+        unidad_dos.app()
+    else:
+        st.warning("Módulo de la Unidad II no disponible")
 
-elif menu == "Cálculo III Parcial III":
-    parcial_tres.app()
+elif menu == "Unidad III":
+    if unidad_tres:
+        unidad_tres.app()
+    else:
+        st.warning("Módulo de la Unidad III no disponible")
+
+elif menu == "Unidad IV":
+    if unidad_cuatro:
+        unidad_cuatro.app()
+    else:
+        st.warning("Módulo de la Unidad IV no disponible")
+
+elif menu == "Unidad V":
+    if unidad_cinco:
+        unidad_cinco.app()
+    else:
+        st.warning("Módulo de la Unidad V no disponible")
