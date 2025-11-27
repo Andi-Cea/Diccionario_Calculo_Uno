@@ -2,7 +2,6 @@ import streamlit as st
 import pandas as pd
 import json
 import os
-import sys
 
 # ========================
 # Helpers para JSON
@@ -45,46 +44,37 @@ def delete_definicion(termino):
     save_data(data)
 
 # ========================
-# Importar vistas de las unidades CON MÁS DEPURACIÓN
+# Importar vistas de las unidades
 # ========================
-def importar_unidad(nombre_unidad):
-    """Función robusta para importar unidades con mejor manejo de errores"""
-    try:
-        # Verificar si la carpeta existe
-        if not os.path.exists(nombre_unidad):
-            return None, False, f"Carpeta '{nombre_unidad}' no existe"
-        
-        # Verificar si el archivo existe
-        archivo_py = os.path.join(nombre_unidad, f"{nombre_unidad}.py")
-        if not os.path.exists(archivo_py):
-            return None, False, f"Archivo '{archivo_py}' no existe"
-        
-        # Intentar importar
-        modulo = __import__(f"{nombre_unidad}.{nombre_unidad}", fromlist=['app'])
-        
-        # Verificar que tenga la función app
-        if hasattr(modulo, 'app'):
-            return modulo.app, True, "OK"
-        else:
-            return None, False, f"Falta función app() en {nombre_unidad}.py"
-            
-    except ImportError as e:
-        return None, False, f"Error de importación: {e}"
-    except Exception as e:
-        return None, False, f"Error inesperado: {e}"
+try:
+    from unidad_uno.unidad_uno import app as app_unidad_uno
+    unidad_uno_disponible = True
+except ImportError:
+    unidad_uno_disponible = False
 
-# Importar cada unidad con más información
-unidades = {}
-for i, nombre in enumerate(["unidad_uno", "unidad_dos", "unidad_tres", "unidad_cuatro", "unidad_cinco"], 1):
-    funcion_app, disponible, mensaje = importar_unidad(nombre)
-    unidades[nombre] = {
-        'funcion': funcion_app, 
-        'disponible': disponible,
-        'mensaje': mensaje
-    }
-    
-    # Mostrar estado en consola para depuración
-    print(f"{nombre}: {mensaje}")
+try:
+    from unidad_dos.unidad_dos import app as app_unidad_dos
+    unidad_dos_disponible = True
+except ImportError:
+    unidad_dos_disponible = False
+
+try:
+    from unidad_tres.unidad_tres import app as app_unidad_tres
+    unidad_tres_disponible = True
+except ImportError:
+    unidad_tres_disponible = False
+
+try:
+    from unidad_cuatro.unidad_cuatro import app as app_unidad_cuatro
+    unidad_cuatro_disponible = True
+except ImportError:
+    unidad_cuatro_disponible = False
+
+try:
+    from unidad_cinco.unidad_cinco import app as app_unidad_cinco
+    unidad_cinco_disponible = True
+except ImportError:
+    unidad_cinco_disponible = False
 
 # ========================
 # Configuración
@@ -98,12 +88,6 @@ menu = st.sidebar.radio(
     "Selecciona una vista:",
     ["Diccionario", "Unidad I", "Unidad II", "Unidad III", "Unidad IV", "Unidad V"]
 )
-
-# Mostrar estado de las unidades en el sidebar para depuración
-with st.sidebar.expander("🔧 Estado de Unidades"):
-    for i, nombre in enumerate(["unidad_uno", "unidad_dos", "unidad_tres", "unidad_cuatro", "unidad_cinco"], 1):
-        estado = "✅" if unidades[nombre]['disponible'] else "❌"
-        st.write(f"{estado} Unidad {i}: {unidades[nombre]['mensaje']}")
 
 # ===========================================================
 # VISTA DICCIONARIO
@@ -191,72 +175,31 @@ if menu == "Diccionario":
 # VISTAS DE LAS UNIDADES
 # ===========================================================
 elif menu == "Unidad I":
-    if unidades['unidad_uno']['disponible']:
-        unidades['unidad_uno']['funcion']()
+    if unidad_uno_disponible:
+        app_unidad_uno()
     else:
-        st.error(f"❌ Unidad I no disponible: {unidades['unidad_uno']['mensaje']}")
-        mostrar_solucion_unidad("unidad_uno")
+        st.error("❌ Módulo de la Unidad I no disponible")
 
 elif menu == "Unidad II":
-    if unidades['unidad_dos']['disponible']:
-        unidades['unidad_dos']['funcion']()
+    if unidad_dos_disponible:
+        app_unidad_dos()
     else:
-        st.error(f"❌ Unidad II no disponible: {unidades['unidad_dos']['mensaje']}")
-        mostrar_solucion_unidad("unidad_dos")
+        st.error("❌ Módulo de la Unidad II no disponible")
 
 elif menu == "Unidad III":
-    if unidades['unidad_tres']['disponible']:
-        unidades['unidad_tres']['funcion']()
+    if unidad_tres_disponible:
+        app_unidad_tres()
     else:
-        st.error(f"❌ Unidad III no disponible: {unidades['unidad_tres']['mensaje']}")
-        mostrar_solucion_unidad("unidad_tres")
+        st.error("❌ Módulo de la Unidad III no disponible")
 
 elif menu == "Unidad IV":
-    if unidades['unidad_cuatro']['disponible']:
-        unidades['unidad_cuatro']['funcion']()
+    if unidad_cuatro_disponible:
+        app_unidad_cuatro()
     else:
-        st.error(f"❌ Unidad IV no disponible: {unidades['unidad_cuatro']['mensaje']}")
-        mostrar_solucion_unidad("unidad_cuatro")
+        st.error("❌ Módulo de la Unidad IV no disponible")
 
 elif menu == "Unidad V":
-    if unidades['unidad_cinco']['disponible']:
-        unidades['unidad_cinco']['funcion']()
+    if unidad_cinco_disponible:
+        app_unidad_cinco()
     else:
-        st.error(f"❌ Unidad V no disponible: {unidades['unidad_cinco']['mensaje']}")
-        mostrar_solucion_unidad("unidad_cinco")
-
-def mostrar_solucion_unidad(nombre_unidad):
-    """Muestra información de solución para unidades no disponibles"""
-    st.info(f"""
-    **Solución para {nombre_unidad}:**
-    
-    1. **Verificar estructura de carpetas:**
-       ```
-       {nombre_unidad}/
-       ├── __init__.py
-       └── {nombre_unidad}.py
-       ```
-    
-    2. **Verificar que {nombre_unidad}.py tenga:**
-    ```python
-    import streamlit as st
-    
-    def app():
-        st.title("Unidad ...")
-        # Tu contenido aquí...
-    ```
-    
-    3. **Ejecutar verificación en terminal:**
-    ```bash
-    python -c "from {nombre_unidad}.{nombre_unidad} import app; print('✅ OK')"
-    ```
-    """)
-    
-    # Mostrar estructura actual del directorio
-    if st.checkbox(f"Mostrar estructura de {nombre_unidad}"):
-        if os.path.exists(nombre_unidad):
-            st.write(f"**Contenido de {nombre_unidad}/:**")
-            for item in os.listdir(nombre_unidad):
-                st.write(f"- {item}")
-        else:
-            st.error(f"La carpeta '{nombre_unidad}' no existe")
+        st.error("❌ Módulo de la Unidad V no disponible")
