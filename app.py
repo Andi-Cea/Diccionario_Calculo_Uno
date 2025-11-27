@@ -56,29 +56,39 @@ def delete_definicion(termino):
 # Importar vistas de las unidades
 # ========================
 try:
-    from unidad_uno import unidad_uno
-except ImportError:
-    unidad_uno = None
+    from unidad_uno.unidad_uno import app as app_unidad_uno
+    unidad_uno_disponible = True
+except ImportError as e:
+    st.error(f"Error importando unidad_uno: {e}")
+    unidad_uno_disponible = False
 
 try:
-    from unidad_dos import unidad_dos
-except ImportError:
-    unidad_dos = None
+    from unidad_dos.unidad_dos import app as app_unidad_dos
+    unidad_dos_disponible = True
+except ImportError as e:
+    st.error(f"Error importando unidad_dos: {e}")
+    unidad_dos_disponible = False
 
 try:
-    from unidad_tres import unidad_tres
-except ImportError:
-    unidad_tres = None
+    from unidad_tres.unidad_tres import app as app_unidad_tres
+    unidad_tres_disponible = True
+except ImportError as e:
+    st.error(f"Error importando unidad_tres: {e}")
+    unidad_tres_disponible = False
 
 try:
-    from unidad_cuatro import unidad_cuatro
-except ImportError:
-    unidad_cuatro = None
+    from unidad_cuatro.unidad_cuatro import app as app_unidad_cuatro
+    unidad_cuatro_disponible = True
+except ImportError as e:
+    st.error(f"Error importando unidad_cuatro: {e}")
+    unidad_cuatro_disponible = False
 
 try:
-    from unidad_cinco import unidad_cinco
-except ImportError:
-    unidad_cinco = None
+    from unidad_cinco.unidad_cinco import app as app_unidad_cinco
+    unidad_cinco_disponible = True
+except ImportError as e:
+    st.error(f"Error importando unidad_cinco: {e}")
+    unidad_cinco_disponible = False
 
 # ========================
 # Configuración
@@ -200,31 +210,36 @@ if menu == "Diccionario":
 # VISTAS DE LAS UNIDADES
 # ===========================================================
 elif menu == "Unidad I":
-    if unidad_uno:
-        unidad_uno.app()
+    if unidad_uno_disponible:
+        app_unidad_uno()
     else:
-        st.warning("Módulo de la Unidad I no disponible")
+        st.error("❌ Módulo de la Unidad I no disponible")
+        st.info("Estructura esperada: unidad_uno/unidad_uno.py con función app()")
 
 elif menu == "Unidad II":
-    if unidad_dos:
-        unidad_dos.app()
+    if unidad_dos_disponible:
+        app_unidad_dos()
     else:
-        st.warning("Módulo de la Unidad II no disponible")
+        st.error("❌ Módulo de la Unidad II no disponible")
+        st.info("Estructura esperada: unidad_dos/unidad_dos.py con función app()")
 
 elif menu == "Unidad III":
-    if unidad_tres:
-        unidad_tres.app()
+    if unidad_tres_disponible:
+        app_unidad_tres()
     else:
-        st.warning("Módulo de la Unidad III no disponible")
+        st.error("❌ Módulo de la Unidad III no disponible")
+        st.info("Estructura esperada: unidad_tres/unidad_tres.py con función app()")
 
 elif menu == "Unidad IV":
-    if unidad_cuatro:
-        unidad_cuatro.app()
+    if unidad_cuatro_disponible:
+        app_unidad_cuatro()
     else:
-        st.warning("Módulo de la Unidad IV no disponible")
+        st.error("❌ Módulo de la Unidad IV no disponible")
+        st.info("Estructura esperada: unidad_cuatro/unidad_cuatro.py con función app()")
 
 elif menu == "Unidad V":
-    if unidad_cinco:
-        unidad_cinco.app()
+    if unidad_cinco_disponible:
+        app_unidad_cinco()
     else:
-        st.warning("Módulo de la Unidad V no disponible")
+        st.error("❌ Módulo de la Unidad V no disponible")
+        st.info("Estructura esperada: unidad_cinco/unidad_cinco.py con función app()")
