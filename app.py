@@ -1,38 +1,75 @@
 import streamlit as st
 import pandas as pd
-from db import (
-    create_table,
-    insert_definicion,
-    get_definicions,
-    delete_definicion,
-    update_definicion_by_id,
-)
+import json
+import os
 
-# ==============================
-# Importar vistas Cálculo III
-# ==============================
+# ========================
+# Helpers para JSON
+# ========================
+DATA_FILE = "data.json"
+
+def load_data():
+    if not os.path.exists(DATA_FILE):
+        return {"conceptos": []}
+    with open(DATA_FILE, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+def save_data(data):
+    with open(DATA_FILE, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
+
+def get_definicions():
+    data = load_data()
+    return [(c["id"], c["termino"], c["definicion"]) for c in data["conceptos"]]
+
+def insert_definicion(termino, definicion):
+    data = load_data()
+    conceptos = data["conceptos"]
+
+    # crear nuevo id
+    new_id = max([c["id"] for c in conceptos], default=0) + 1
+
+    # insertar
+    conceptos.append({
+        "id": new_id,
+        "termino": termino,
+        "definicion": definicion
+    })
+
+    save_data(data)
+
+def update_definicion_by_id(registro_id, termino, definicion):
+    data = load_data()
+    for c in data["conceptos"]:
+        if c["id"] == registro_id:
+            c["termino"] = termino
+            c["definicion"] = definicion
+            break
+    save_data(data)
+
+def delete_definicion(termino):
+    data = load_data()
+    data["conceptos"] = [c for c in data["conceptos"] if c["termino"] != termino]
+    save_data(data)
+
+# ========================
+# Importar vistas
+# ========================
 from parcial_uno import parcial_uno
 from parcial_dos import parcial_dos
 from parcial_tres import parcial_tres
 
-# --- CONFIGURACIÓN ---
+# ========================
+# Configuración
+# ========================
 st.set_page_config(page_title="Diccionario Cálculo III", layout="centered")
 
-# Crear tabla al iniciar
-try:
-    create_table()
-except Exception as e:
-    st.error(f"No se pudo crear la tabla: {e}")
-
-# --- MENÚ LATERAL ---
+# ========================
+# Menú lateral
+# ========================
 menu = st.sidebar.radio(
     "Selecciona una vista:",
-    [
-        "Diccionario",
-        "Cálculo III Parcial I",
-        "Cálculo III Parcial II",
-        "Cálculo III Parcial III"
-    ]
+    ["Diccionario", "Cálculo III Parcial I", "Cálculo III Parcial II", "Cálculo III Parcial III"]
 )
 
 # ===========================================================
@@ -41,9 +78,7 @@ menu = st.sidebar.radio(
 if menu == "Diccionario":
     st.title("📘 Diccionario interactivo de Cálculo III")
 
-    # --------------------------
     # BUSCADOR
-    # --------------------------
     col1, col2 = st.columns([3, 1])
 
     with col1:
@@ -52,16 +87,10 @@ if menu == "Diccionario":
     with col2:
         exact = st.checkbox("Búsqueda exacta", value=False)
 
-    # Cargar definiciones
-    try:
-        rows = get_definicions()  # (id, termino, definicion)
-    except Exception as e:
-        st.error(f"No se pudieron cargar las definiciones: {e}")
-        rows = []
-
-    # Diccionarios auxiliares
+    # Cargar datos
+    rows = get_definicions()
     data = {r[1]: r[2] for r in rows}
-    id_map = {r[1]: r[0] for r in rows}  # término → id
+    id_map = {r[1]: r[0] for r in rows}
 
     def search(q, exact_match):
         q = q.strip().lower()
@@ -75,9 +104,7 @@ if menu == "Diccionario":
 
     results = search(query, exact)
 
-    # --------------------------
     # RESULTADOS
-    # --------------------------
     st.markdown("---")
     st.subheader(f"Resultados ({len(results)})")
 
@@ -87,7 +114,6 @@ if menu == "Diccionario":
 
             colA, colB = st.columns(2)
 
-            # ---- BOTÓN EDITAR ----
             with colA:
                 if st.button("✏️ Editar", key=f"edit_{palabra}"):
                     st.session_state["edit_word"] = palabra
@@ -95,21 +121,15 @@ if menu == "Diccionario":
                     st.session_state["edit_id"] = id_map[palabra]
                     st.rerun()
 
-            # ---- BOTÓN ELIMINAR ----
             with colB:
                 if st.button("🗑️ Eliminar", key=f"del_{palabra}"):
-                    try:
-                        delete_definicion(palabra)
-                        st.success(f"'{palabra}' eliminado correctamente.")
-                        st.rerun()
-                    except Exception as e:
-                        st.error(f"No se pudo eliminar: {e}")
+                    delete_definicion(palabra)
+                    st.success(f"'{palabra}' eliminado correctamente.")
+                    st.rerun()
 
     st.markdown("---")
 
-    # --------------------------
     # FORMULARIO AGREGAR / EDITAR
-    # --------------------------
     st.subheader("Añadir o editar término")
 
     default_word = st.session_state.get("edit_word", "")
@@ -127,38 +147,29 @@ if menu == "Diccionario":
         if not word:
             st.error("El término no puede estar vacío.")
         else:
-            try:
-                # Si estamos editando
-                if "edit_id" in st.session_state:
-                    registro_id = st.session_state["edit_id"]
-                    update_definicion_by_id(registro_id, word, definition)
-                    st.success(f"Actualizado correctamente: {word}")
+            if "edit_id" in st.session_state:
+                registro_id = st.session_state["edit_id"]
+                update_definicion_by_id(registro_id, word, definition)
+                st.success(f"Actualizado correctamente: {word}")
 
-                    # limpiar estado
-                    del st.session_state["edit_word"]
-                    del st.session_state["edit_def"]
-                    del st.session_state["edit_id"]
+                del st.session_state["edit_word"]
+                del st.session_state["edit_def"]
+                del st.session_state["edit_id"]
 
-                # Si estamos insertando
-                else:
-                    insert_definicion(word, definition)
-                    st.success(f"Guardado: {word}")
+            else:
+                insert_definicion(word, definition)
+                st.success(f"Guardado: {word}")
 
-                st.rerun()
+            st.rerun()
 
-            except Exception as e:
-                st.error(f"No se pudo guardar el término: {e}")
-
-    # --------------------------
     # TABLA COMPLETA
-    # --------------------------
     if st.checkbox("Mostrar tabla completa"):
         if rows:
             df = pd.DataFrame(rows, columns=["ID", "Término", "Definición"])
             st.dataframe(df, use_container_width=True)
 
 # ===========================================================
-# VISTAS DE LOS PARCIALES
+# OTRAS VISTAS
 # ===========================================================
 elif menu == "Cálculo III Parcial I":
     parcial_uno.app()
