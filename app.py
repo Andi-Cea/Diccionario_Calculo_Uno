@@ -77,6 +77,39 @@ except ImportError:
     unidad_cinco_disponible = False
 
 # ========================
+# Importar vistas de EJEMPLOS de las unidades
+# ========================
+try:
+    from ejemplos_unidad_uno.ejemplos_unidad_uno import app as app_ejemplos_unidad_uno
+    ejemplos_unidad_uno_disponible = True
+except ImportError:
+    ejemplos_unidad_uno_disponible = False
+
+try:
+    from ejemplos_unidad_dos.ejemplos_unidad_dos import app as app_ejemplos_unidad_dos
+    ejemplos_unidad_dos_disponible = True
+except ImportError:
+    ejemplos_unidad_dos_disponible = False
+
+try:
+    from ejemplos_unidad_tres.ejemplos_unidad_tres import app as app_ejemplos_unidad_tres
+    ejemplos_unidad_tres_disponible = True
+except ImportError:
+    ejemplos_unidad_tres_disponible = False
+
+try:
+    from ejemplos_unidad_cuatro.ejemplos_unidad_cuatro import app as app_ejemplos_unidad_cuatro
+    ejemplos_unidad_cuatro_disponible = True
+except ImportError:
+    ejemplos_unidad_cuatro_disponible = False
+
+try:
+    from ejemplos_unidad_cinco.ejemplos_unidad_cinco import app as app_ejemplos_unidad_cinco
+    ejemplos_unidad_cinco_disponible = True
+except ImportError:
+    ejemplos_unidad_cinco_disponible = False
+
+# ========================
 # Configuración
 # ========================
 st.set_page_config(page_title="Diccionario Cálculo I", layout="centered")
@@ -86,7 +119,12 @@ st.set_page_config(page_title="Diccionario Cálculo I", layout="centered")
 # ========================
 menu = st.sidebar.radio(
     "Selecciona una vista:",
-    ["Diccionario", "Unidad I", "Unidad II", "Unidad III", "Unidad IV", "Unidad V"]
+    [
+        "Diccionario", 
+        "Unidad I", "Unidad II", "Unidad III", "Unidad IV", "Unidad V",
+        "Ejemplos Unidad I", "Ejemplos Unidad II", "Ejemplos Unidad III", 
+        "Ejemplos Unidad IV", "Ejemplos Unidad V"
+    ]
 )
 
 # ===========================================================
@@ -203,3 +241,36 @@ elif menu == "Unidad V":
         app_unidad_cinco()
     else:
         st.error("❌ Módulo de la Unidad V no disponible")
+
+# ===========================================================
+# VISTAS DE EJEMPLOS DE LAS UNIDADES
+# ===========================================================
+elif menu == "Ejemplos Unidad I":
+    if ejemplos_unidad_uno_disponible:
+        app_ejemplos_unidad_uno()
+    else:
+        st.error("❌ Módulo de Ejemplos Unidad I no disponible")
+
+elif menu == "Ejemplos Unidad II":
+    if ejemplos_unidad_dos_disponible:
+        app_ejemplos_unidad_dos()
+    else:
+        st.error("❌ Módulo de Ejemplos Unidad II no disponible")
+
+elif menu == "Ejemplos Unidad III":
+    if ejemplos_unidad_tres_disponible:
+        app_ejemplos_unidad_tres()
+    else:
+        st.error("❌ Módulo de Ejemplos Unidad III no disponible")
+
+elif menu == "Ejemplos Unidad IV":
+    if ejemplos_unidad_cuatro_disponible:
+        app_ejemplos_unidad_cuatro()
+    else:
+        st.error("❌ Módulo de Ejemplos Unidad IV no disponible")
+
+elif menu == "Ejemplos Unidad V":
+    if ejemplos_unidad_cinco_disponible:
+        app_ejemplos_unidad_cinco()
+    else:
+        st.error("❌ Módulo de Ejemplos Unidad V no disponible")
