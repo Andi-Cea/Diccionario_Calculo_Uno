@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 
 def app():
-    st.title("🎯 Ejercicios Interactivos - Cálculo I")
+    st.title("🎯 Ejercicios Interactivos - Cálculo I Unidad I")
     
     # Menú de temas
     tema = st.sidebar.selectbox(

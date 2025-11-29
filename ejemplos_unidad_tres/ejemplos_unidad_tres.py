@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 
 def app():
-    st.title("📚 Ejercicios Interactivos - Cálculo Diferencial: Límites y Continuidad")
+    st.title("📚 Ejercicios Interactivos - Cálculo Diferencial: Límites y Continuidad Unidad III")
     
     # Menú de temas
     tema = st.sidebar.selectbox(
