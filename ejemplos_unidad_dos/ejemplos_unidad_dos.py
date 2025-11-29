@@ -24,16 +24,6 @@ def app():
     if 'exercises_completed' not in st.session_state:
         st.session_state.exercises_completed = 0
     
-    # Diccionario de temas
-    temas = {
-        "2.1 Definición de Función": definicion_funcion,
-        "2.2 Notación y Valor Numérico": notacion_valor,
-        "2.3 Dominio y Rango": dominio_rango,
-        "2.4 Funciones Inyectivas, Sobreyectivas y Biyectivas": tipos_funciones,
-        "2.5 Operaciones entre Funciones": operaciones_funciones,
-        "2.6 Gráficas de Funciones": graficas_funciones
-    }
-    
     # Mostrar puntuación
     st.sidebar.markdown("---")
     st.sidebar.metric("🏆 Puntuación", st.session_state.score)
@@ -45,8 +35,18 @@ def app():
         st.rerun()
     
     # Ejecutar tema seleccionado
-    if tema in temas:
-        temas[tema]()
+    if tema == "2.1 Definición de Función":
+        definicion_funcion()
+    elif tema == "2.2 Notación y Valor Numérico":
+        notacion_valor()
+    elif tema == "2.3 Dominio y Rango":
+        dominio_rango()
+    elif tema == "2.4 Funciones Inyectivas, Sobreyectivas y Biyectivas":
+        tipos_funciones()
+    elif tema == "2.5 Operaciones entre Funciones":
+        operaciones_funciones()
+    elif tema == "2.6 Gráficas de Funciones":
+        graficas_funciones()
 
 def check_answer(correct_answer, user_answer, tolerance=0.01):
     """Verifica si la respuesta del usuario es correcta"""
