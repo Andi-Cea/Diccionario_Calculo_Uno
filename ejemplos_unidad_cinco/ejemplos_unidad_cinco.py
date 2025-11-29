@@ -3,8 +3,8 @@ import numpy as np
 import pandas as pd
 
 def app():
-    st.title("🎓 Ejercicios Interactivos - Cálculo Diferencial")
-    st.success("✅ Módulo cargado exitosamente")
+    st.title("🎓 Ejercicios Interactivos - Cálculo Diferencial unidad V")
+
     
     # Menú de temas
     tema = st.sidebar.selectbox(
