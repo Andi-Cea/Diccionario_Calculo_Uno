@@ -3,7 +3,7 @@ import numpy as np
 import sympy as sp
 import matplotlib.pyplot as plt
 
-def app():
+def app_ejemplos_unidad_uno()():
     st.title("🎯 Ejercicios Interactivos - Cálculo I")
     
     # Menú de temas
@@ -274,4 +274,4 @@ def valor_absoluto():
 
 # Función principal para ejecutar la app
 if __name__ == "__main__":
-    app()
+    app_ejemplos_unidad_uno()
