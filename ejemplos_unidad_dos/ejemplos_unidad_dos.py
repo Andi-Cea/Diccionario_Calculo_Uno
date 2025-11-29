@@ -1,9 +1,5 @@
 import streamlit as st
-
-def app():
-    import streamlit as st
 import numpy as np
-import sympy as sp
 
 def app():
     st.title("🎯 Ejercicios Interactivos - Cálculo I: Funciones")
@@ -323,5 +319,7 @@ def graficas_funciones():
             st.success("✅ 2 de 3 correctas")
         else:
             st.error("❌ Revisa los cálculos. Recuerda que [x] es el mayor entero ≤ x")
-    
-    st.success("✅ Módulo cargado exitosamente")
+
+# Ejecutar la aplicación
+if __name__ == "__main__":
+    app()
