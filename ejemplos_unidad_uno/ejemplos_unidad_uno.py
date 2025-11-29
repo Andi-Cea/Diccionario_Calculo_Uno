@@ -1,7 +1,5 @@
 import streamlit as st
 import numpy as np
-import sympy as sp
-import matplotlib.pyplot as plt
 
 def app():
     st.title("🎯 Ejercicios Interactivos - Cálculo I")
@@ -24,15 +22,6 @@ def app():
     if 'exercises_completed' not in st.session_state:
         st.session_state.exercises_completed = 0
     
-    # Diccionario de temas
-    temas = {
-        "1.1 Axiomas de Campo y Orden": axiomas_campo_orden,
-        "1.2 Conjuntos Infinitos": conjuntos_infinitos,
-        "1.3 Teoremas Números Reales": teoremas_reales,
-        "1.4 Intervalos": intervalos,
-        "1.5 Valor Absoluto": valor_absoluto
-    }
-    
     # Mostrar puntuación
     st.sidebar.markdown("---")
     st.sidebar.metric("🏆 Puntuación", st.session_state.score)
@@ -44,8 +33,16 @@ def app():
         st.rerun()
     
     # Ejecutar tema seleccionado
-    if tema in temas:
-        temas[tema]()
+    if tema == "1.1 Axiomas de Campo y Orden":
+        axiomas_campo_orden()
+    elif tema == "1.2 Conjuntos Infinitos":
+        conjuntos_infinitos()
+    elif tema == "1.3 Teoremas Números Reales":
+        teoremas_reales()
+    elif tema == "1.4 Intervalos":
+        intervalos()
+    elif tema == "1.5 Valor Absoluto":
+        valor_absoluto()
 
 def check_answer(correct_answer, user_answer, tolerance=0.01):
     """Verifica si la respuesta del usuario es correcta"""
