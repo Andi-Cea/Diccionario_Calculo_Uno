@@ -321,6 +321,3 @@ def graficas_funciones():
         else:
             st.error("❌ Revisa los cálculos. Recuerda que [x] es el mayor entero ≤ x")
 
-# Ejecutar la aplicación
-if __name__ == "__main__":
-    app()
