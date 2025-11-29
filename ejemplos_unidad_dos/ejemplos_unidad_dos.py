@@ -320,4 +320,3 @@ def graficas_funciones():
             st.success("✅ 2 de 3 correctas")
         else:
             st.error("❌ Revisa los cálculos. Recuerda que [x] es el mayor entero ≤ x")
-
