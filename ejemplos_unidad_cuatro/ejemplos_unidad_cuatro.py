@@ -3,54 +3,6 @@ import numpy as np
 import sympy as sp
 import math
 
-def app():
-    st.title("📚 Ejercicios Interactivos - Cálculo Diferencial")
-    
-    # Menú de temas
-    tema = st.sidebar.selectbox(
-        "Selecciona un tema:",
-        [
-            "4.1 Concepto de derivada",
-            "4.2 Interpretación geométrica. Ángulos entre curvas",
-            "4.3 Teoremas sobre derivación de funciones elementales",
-            "4.4 Diferenciabilidad de funciones elementales",
-            "4.5 Diferenciación implícita", 
-            "4.6 Derivadas de orden superior",
-            "4.7 Regla de L'Hospital"
-        ]
-    )
-    
-    # Inicializar estado de la sesión
-    if 'score_diff' not in st.session_state:
-        st.session_state.score_diff = 0
-    if 'exercises_completed_diff' not in st.session_state:
-        st.session_state.exercises_completed_diff = 0
-    
-    # Diccionario de temas
-    temas = {
-        "4.1 Concepto de derivada": concepto_derivada,
-        "4.2 Interpretación geométrica. Ángulos entre curvas": interpretacion_geometrica,
-        "4.3 Teoremas sobre derivación de funciones elementales": teoremas_derivacion,
-        "4.4 Diferenciabilidad de funciones elementales": diferenciabilidad,
-        "4.5 Diferenciación implícita": diferenciacion_implicita,
-        "4.6 Derivadas de orden superior": derivadas_orden_superior,
-        "4.7 Regla de L'Hospital": regla_lhospital
-    }
-    
-    # Mostrar puntuación
-    st.sidebar.markdown("---")
-    st.sidebar.metric("🏆 Puntuación", st.session_state.score_diff)
-    st.sidebar.metric("✅ Ejercicios Completados", st.session_state.exercises_completed_diff)
-    
-    if st.sidebar.button("🔄 Reiniciar Puntuación"):
-        st.session_state.score_diff = 0
-        st.session_state.exercises_completed_diff = 0
-        st.rerun()
-    
-    # Ejecutar tema seleccionado
-    if tema in temas:
-        temas[tema]()
-
 def check_answer_diff(correct_answer, user_answer, tolerance=0.01):
     """Verifica si la respuesta del usuario es correcta"""
     try:
@@ -316,6 +268,56 @@ def regla_lhospital():
     if st.button("Verificar Límite 2", key="check_lim2"):
         # L'Hospital: (1/x)/1 = 1/x → 0 cuando x→∞
         check_answer_diff(0.0, user_lim2)
+
+def app():
+    st.title("📚 Ejercicios Interactivos - Cálculo Diferencial")
+    
+    # Menú de temas
+    tema = st.sidebar.selectbox(
+        "Selecciona un tema:",
+        [
+            "4.1 Concepto de derivada",
+            "4.2 Interpretación geométrica. Ángulos entre curvas",
+            "4.3 Teoremas sobre derivación de funciones elementales",
+            "4.4 Diferenciabilidad de funciones elementales",
+            "4.5 Diferenciación implícita", 
+            "4.6 Derivadas de orden superior",
+            "4.7 Regla de L'Hospital"
+        ]
+    )
+    
+    # Inicializar estado de la sesión
+    if 'score_diff' not in st.session_state:
+        st.session_state.score_diff = 0
+    if 'exercises_completed_diff' not in st.session_state:
+        st.session_state.exercises_completed_diff = 0
+    
+    # Diccionario de temas
+    temas = {
+        "4.1 Concepto de derivada": concepto_derivada,
+        "4.2 Interpretación geométrica. Ángulos entre curvas": interpretacion_geometrica,
+        "4.3 Teoremas sobre derivación de funciones elementales": teoremas_derivacion,
+        "4.4 Diferenciabilidad de funciones elementales": diferenciabilidad,
+        "4.5 Diferenciación implícita": diferenciacion_implicita,
+        "4.6 Derivadas de orden superior": derivadas_orden_superior,
+        "4.7 Regla de L'Hospital": regla_lhospital
+    }
+    
+    # Mostrar puntuación
+    st.sidebar.markdown("---")
+    st.sidebar.metric("🏆 Puntuación", st.session_state.score_diff)
+    st.sidebar.metric("✅ Ejercicios Completados", st.session_state.exercises_completed_diff)
+    
+    if st.sidebar.button("🔄 Reiniciar Puntuación"):
+        st.session_state.score_diff = 0
+        st.session_state.exercises_completed_diff = 0
+        st.rerun()
+    
+    # Ejecutar tema seleccionado
+    if tema in temas:
+        temas[tema]()
+    
+    st.success("✅ Módulo cargado exitosamente")
 
 # Ejecutar la aplicación
 if __name__ == "__main__":
