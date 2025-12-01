@@ -65,7 +65,7 @@ def axiomas_campo_orden():
     st.info("Practica los axiomas de cuerpo y propiedades de orden")
     
     # Ejercicio 1 - Propiedad conmutativa
-    st.subheader("Ejercicio 1: Propiedad Conmutativa")
+    st.subheader("Ejercicio 1: Propiedades")
     st.write("Si a + b = 8 y b + a = 8, ¿qué propiedad se está aplicando?")
     
     propiedad = st.radio(
